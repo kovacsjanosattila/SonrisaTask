@@ -1,42 +1,75 @@
-using AIAgentWorkerService;
+using Microsoft.SemanticKernel;
+using WeatherService;
+//using FinanceService;
+//using RssNewsService;
 using Serilog;
+using AIAgent.Contracts;
 
 namespace AIAgentWorkerService;
 
-
-    public class Program
+public class Program
+{
+    public static void Main(string[] args)
     {
-        public static void Main(string[] args)
+        Log.Logger = new LoggerConfiguration()
+            .MinimumLevel.Debug()
+            .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)
+            .Enrich.FromLogContext()
+            .WriteTo.File(@"C:\Temp\Jani.txt")
+            .CreateLogger();
+
+        try
         {
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Debug()
-                .MinimumLevel.Override("Microsoft", Serilog.Events.LogEventLevel.Warning)
-                .Enrich.FromLogContext()
-                .WriteTo.File(@"C:\Temp\Jani.txt")
-                .CreateLogger();
+            Log.Information("Starting up the service");
+            
+            HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
+            // Kernel builder beregisztrálása (Ebből tudunk új, tiszta Kerneleket gyártani)
+            builder.Services.AddTransient<IKernelBuilder>(sp => 
+                Kernel.CreateBuilder().AddOpenAIChatCompletion("gpt-4o", "API_KULCS"));
 
-            try
+            // Pluginok
+            builder.Services.AddTransient<WeatherPlugin>();
+            //builder.Services.AddTransient<FinancePlugin>();
+            //builder.Services.AddTransient<RssNewsPlugin>();
+
+            // Az Agent Taskok regisztrálása UGYANAHHOZ az interfészhez
+            builder.Services.AddScoped<IScheduledAgentTask>(sp => 
             {
-                Log.Information("Starting up the service");
-                HostApplicationBuilder builder = Host.CreateApplicationBuilder(args);
-                // Register the Worker class as a hosted service to run background tasks.
-                builder.Services
-                    .AddHostedService<Worker>()
-                    .AddSerilog();
+                var builder = sp.GetRequiredService<IKernelBuilder>();
+                return new WeatherAgentTask(builder.Build(), sp.GetRequiredService<WeatherPlugin>());
+            });
 
-                var host = builder.Build();
-                host.Run();
-            }
-            catch (Exception ex)
-            {
-                Log.Fatal(ex, "There was a problem starting the service");
-                return;
-            }
-            finally
-            {
-                Log.CloseAndFlush();
-            }
+            // builder.Services.AddScoped<IScheduledAgentTask>(sp => 
+            // {
+            //     var builder = sp.GetRequiredService<IKernelBuilder>();
+            //     return new FinanceAgentTask(builder.Build(), sp.GetRequiredService<FinancePlugin>());
+            // });
 
+            // builder.Services.AddScoped<IScheduledAgentTask>(sp => 
+            // {
+            //     var builder = sp.GetRequiredService<IKernelBuilder>();
+            //     return new NewsAgentTask(builder.Build(), sp.GetRequiredService<RssNewsPlugin>());
+            // });
 
+            
+            // Register the Worker class as a hosted service to run background tasks.
+            builder.Services
+                .AddHostedService<Worker>()
+                .AddSerilog();
+
+            var host = builder.Build();
+            host.Run();
         }
+        catch (Exception ex)
+        {
+            Log.Fatal(ex, "There was a problem starting the service");
+            return;
+        }
+        finally
+        {
+            Log.CloseAndFlush();
+        }
+
+
     }
+}

@@ -14,4 +14,8 @@
     <PackageReference Include="System.Text.Json" Version="10.0.10" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\AIAgent.Contracts\AIAgent.Contracts.csproj" />
+  </ItemGroup>
+
 </Project>
