@@ -1,4 +1,4 @@
-﻿namespace WeatherService;
+﻿namespace AIAgent.WeatherService;
 
 public interface IWeatherService
 {

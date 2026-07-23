@@ -1,7 +1,7 @@
 using System.Text.Json;
 using Microsoft.Extensions.Configuration;
 
-namespace WeatherService;
+namespace AIAgent.WeatherService;
 
 public class OpenWeatherService : IWeatherService
 {

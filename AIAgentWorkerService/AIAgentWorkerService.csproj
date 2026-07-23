@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\WeatherService\WeatherService.csproj" />
     <ProjectReference Include="..\AIAgent.Contracts\AIAgent.Contracts.csproj" />
+    <ProjectReference Include="..\AIAgent.WeatherService\AIAgent.WeatherService.csproj" />
   </ItemGroup>
 </Project>

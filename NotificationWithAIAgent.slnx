@@ -1,5 +1,5 @@
 <Solution>
   <Project Path="AIAgent.Contracts/AIAgent.Contracts.csproj" />
+  <Project Path="AIAgent.WeatherService/AIAgent.WeatherService.csproj" />
   <Project Path="AIAgentWorkerService/AIAgentWorkerService.csproj" />
-  <Project Path="WeatherService/WeatherService.csproj" />
 </Solution>

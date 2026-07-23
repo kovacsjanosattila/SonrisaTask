@@ -1,5 +1,5 @@
 using AIAgent.Contracts;
-
+using AIAgent.WeatherService;
 namespace AIAgentWorkerService;
 
 public class Worker : BackgroundService

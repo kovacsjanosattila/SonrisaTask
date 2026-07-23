@@ -1,9 +1,9 @@
 using Microsoft.SemanticKernel;
-using WeatherService;
+using AIAgent.Contracts;
+using AIAgent.WeatherService;
 //using FinanceService;
 //using RssNewsService;
 using Serilog;
-using AIAgent.Contracts;
 
 namespace AIAgentWorkerService;
 

@@ -1,7 +1,9 @@
 using Microsoft.SemanticKernel;
-using Microsoft.SemanticKernel.AI.ChatCompletion;
+using AIAgent.Contracts;
+using Microsoft.SemanticKernel.Agents;
+using Microsoft.SemanticKernel.ChatCompletion;
 
-namespace WeatherService;
+namespace AIAgent.WeatherService;
 public class WeatherAgentTask : IScheduledAgentTask
 {
     private readonly ChatCompletionAgent _agent;

@@ -1,7 +1,7 @@
 using System.ComponentModel;
 using Microsoft.SemanticKernel;
 
-namespace WeatherService;
+namespace AIAgent.WeatherService;
 
 public class WeatherPlugin
 {
