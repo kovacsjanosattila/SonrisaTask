@@ -26,7 +26,10 @@ public class NewsAgentTask : IScheduledAgentTask
     public async Task<string> ExecuteAsync(CancellationToken cancellationToken)
     {
         var chatHistory = new ChatHistory();
-        chatHistory.AddUserMessage("Ha a helyi politikát vagy gazdaságot a megszokottól jobban-mélyebben érintő eseményt látsz küldj riasztást !");
+        chatHistory.AddSystemMessage("Te egy szigorú adatellenőrző asszisztens vagy. "
+            + " Csak a megadott országhoz kapcsolódó politikai vagy gazdasági híreket ved fel a válaszodba. Derítsd ki a hír megjelenési dátumát is. Ha az egy hétnél régebbi hagyd ki a hírt!" 
+            + " Ha nincs megemlítendő hír akkor mond azt hogy 'Nincs semmi különös hír'!");
+        chatHistory.AddUserMessage("Ha a helyi politikát vagy gazdaságot a megszokottól erősebben vagy mélyebben érintő eseményt látsz küldj riasztást !");
         
         var agentResponse = new System.Text.StringBuilder();
         await foreach (var message in _agent.InvokeAsync(chatHistory, cancellationToken: cancellationToken)) 

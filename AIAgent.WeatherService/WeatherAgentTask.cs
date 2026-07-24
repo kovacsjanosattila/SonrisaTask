@@ -25,6 +25,9 @@ public class WeatherAgentTask : IScheduledAgentTask
     public async Task<string> ExecuteAsync(CancellationToken cancellationToken)
     {
         var chatHistory = new ChatHistory();
+        chatHistory.AddSystemMessage("Te egy szigorú adatellenőrző asszisztens vagy. "
+            + " Csak a megadott helyszínhez kapcsolódó szélsőséges időjárási eseményeket vedd fel a válaszodba. " 
+            + " Ha nincs ilyen helyzet akkor mond azt hogy 'Nincs különleges időjárási helyzet az adott helyen'!");
         chatHistory.AddUserMessage("Ha hirtelen változást, vagy szélsőséges időjárás előrejelzést látsz küldj riasztást !");
         
         var agentResponse = new System.Text.StringBuilder();
