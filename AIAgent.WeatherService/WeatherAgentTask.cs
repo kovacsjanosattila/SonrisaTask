@@ -22,11 +22,16 @@ public class WeatherAgentTask : IScheduledAgentTask
         };
     }
 
-    public async Task ExecuteAsync(CancellationToken cancellationToken)
+    public async Task<string> ExecuteAsync(CancellationToken cancellationToken)
     {
         var chatHistory = new ChatHistory();
         chatHistory.AddUserMessage("Ha hirtelen változást, vagy szélsőséges időjárás előrejelzést látsz küldj riasztást !");
-        await foreach (var message in _agent.InvokeAsync(chatHistory, cancellationToken: cancellationToken)) { }
+        
+        var agentResponse = new System.Text.StringBuilder();
+        await foreach (var message in _agent.InvokeAsync(chatHistory, cancellationToken: cancellationToken)) 
+        {
+            agentResponse.Append(message.Message);
+        }
+        return agentResponse.ToString();
     }
 }
-

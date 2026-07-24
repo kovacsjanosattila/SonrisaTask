@@ -6,5 +6,5 @@ public interface IScheduledAgentTask
     string TaskName { get; } 
     
     // Maga a végrehajtó metódus
-    Task ExecuteAsync(CancellationToken cancellationToken);
+    Task<string> ExecuteAsync(CancellationToken cancellationToken);
 }

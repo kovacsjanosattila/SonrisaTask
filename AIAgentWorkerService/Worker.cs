@@ -55,13 +55,18 @@ public class Worker : BackgroundService
                     _logger.LogInformation("Agent indítása: {TaskName}", agentTask.TaskName);
                     
                     // Indítjuk a feladatot, de nem tesszük elé az 'await' kulcsszót a cikluson belül
-                    var task = agentTask.ExecuteAsync(stoppingToken)
+                    var task = agentTask.ExecuteAsync(stoppingToken) // Ez most már Task<string>
                         .ContinueWith(t => 
                         {
                             // Feladatszintű hibakezelés, hogy ha az egyik elszáll, a többi lefusson
                             if (t.IsFaulted)
                             {
                                 _logger.LogError(t.Exception, "Hiba történt a(z) {TaskName} futtatása közben.", agentTask.TaskName);
+                            }
+                            else if (!t.IsCanceled)
+                            {
+                                // Itt már hozzáférünk az Agent válaszához a t.Result-on keresztül
+                                _logger.LogInformation("Agent ({TaskName}) sikeresen lefutott. Válasz: {AgentResponse}", agentTask.TaskName, t.Result);
                             }
                         }, stoppingToken);
 
