@@ -18,5 +18,6 @@
   <ItemGroup>
     <ProjectReference Include="..\AIAgent.Contracts\AIAgent.Contracts.csproj" />
     <ProjectReference Include="..\AIAgent.WeatherService\AIAgent.WeatherService.csproj" />
+    <ProjectReference Include="..\AIAgent.NewsService\AIAgent.NewsService.csproj" />
   </ItemGroup>
 </Project>

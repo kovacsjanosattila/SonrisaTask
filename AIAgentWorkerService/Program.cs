@@ -4,6 +4,7 @@ using AIAgent.WeatherService;
 //using FinanceService;
 //using RssNewsService;
 using Serilog;
+using AIAgent.NewsService;
 
 namespace AIAgentWorkerService;
 
@@ -27,28 +28,30 @@ public class Program
             builder.Services.AddTransient<IKernelBuilder>(sp => 
                 Kernel.CreateBuilder().AddOpenAIChatCompletion("gpt-4o", "API_KULCS"));
 
-            // Pluginok
+            // Plugins
             builder.Services.AddTransient<WeatherPlugin>();
+            builder.Services.AddTransient<NewsPlugin>();
             //builder.Services.AddTransient<FinancePlugin>();
-            //builder.Services.AddTransient<NewsPlugin>();
 
-            // Az Agent Taskok regisztrálása UGYANAHHOZ az interfészhez
+            // Services for Plugins
+            builder.Services.AddHttpClient<IWeatherService, OpenWeatherService>();
+            builder.Services.AddHttpClient<INewsService, RssNewsService>();
+
+            // Agent Tasks which relay on same IScheduledAgentTask interface
             builder.Services.AddScoped<IScheduledAgentTask>(sp => 
             {
                 var builder = sp.GetRequiredService<IKernelBuilder>();
                 return new WeatherAgentTask(builder.Build(), sp.GetRequiredService<WeatherPlugin>());
             });
-
+            builder.Services.AddScoped<IScheduledAgentTask>(sp => 
+            {
+                var builder = sp.GetRequiredService<IKernelBuilder>();
+                return new NewsAgentTask(builder.Build(), sp.GetRequiredService<NewsPlugin>());
+            });
             // builder.Services.AddScoped<IScheduledAgentTask>(sp => 
             // {
             //     var builder = sp.GetRequiredService<IKernelBuilder>();
             //     return new FinanceAgentTask(builder.Build(), sp.GetRequiredService<FinancePlugin>());
-            // });
-
-            // builder.Services.AddScoped<IScheduledAgentTask>(sp => 
-            // {
-            //     var builder = sp.GetRequiredService<IKernelBuilder>();
-            //     return new NewsAgentTask(builder.Build(), sp.GetRequiredService<RssNewsPlugin>());
             // });
 
             
