@@ -30,7 +30,7 @@ public class Program
             // Pluginok
             builder.Services.AddTransient<WeatherPlugin>();
             //builder.Services.AddTransient<FinancePlugin>();
-            //builder.Services.AddTransient<RssNewsPlugin>();
+            //builder.Services.AddTransient<NewsPlugin>();
 
             // Az Agent Taskok regisztrálása UGYANAHHOZ az interfészhez
             builder.Services.AddScoped<IScheduledAgentTask>(sp => 

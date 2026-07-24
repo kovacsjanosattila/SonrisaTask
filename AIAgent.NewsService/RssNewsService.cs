@@ -31,6 +31,8 @@ public class RssNewsService : INewsService
 
     public async Task<string> GetActualNewsAsync(string country, CancellationToken cancellationToken = default)
     {
+        _logger.LogInformation("GetActualNewsAsync started!");
+        string returnValue = string.Empty;
         try
         {
             // 1. Download an RSS XML into one stream
@@ -62,18 +64,20 @@ public class RssNewsService : INewsService
                 .ToList();
 
             // ToDo: News service may have more item (news) to return, but but Weather service only one
-            return string.Join("\n", articles);
+            returnValue = string.Join("\n", articles);
         }
         catch (HttpRequestException ex)
         {
             _logger.LogError(ex, "Hálózati hiba az RSS feed letöltésekor: {Url}", _rssFeedUrl);
-            return $"Hálózati hiba az RSS feed letöltésekor: {_rssFeedUrl}";
+            returnValue = $"Hálózati hiba az RSS feed letöltésekor: {_rssFeedUrl}";
         }
         catch (XmlException ex)
         {
             _logger.LogError(ex, "Hibás XML formátum a feedben: {Url}", _rssFeedUrl);
-            return $"Az RSS feed formátuma hibás: {_rssFeedUrl}";
+            returnValue = $"Az RSS feed formátuma hibás: {_rssFeedUrl}";
         }
+        _logger.LogInformation("GetActualNewsAsync ending!");
+        return returnValue;
     }
 
     // Segédmetódus, mert az RSS feedek summary-je gyakran tartalmaz nyers HTML elemeket (<p>, <br>), 
