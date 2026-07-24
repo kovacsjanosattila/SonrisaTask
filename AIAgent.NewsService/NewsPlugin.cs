@@ -16,9 +16,9 @@ public class NewsPlugin
     // Then user can control news content to: politican, economic, technology, renewable ... directions
     [KernelFunction("get_news_data")]
     [Description("Megnézi egy adott ország politikai, gazdasági és egyéb híreit.")]
-    public async Task<string> GetActualNews([Description("Az ország pontos neve, például Magyarország.")]string country)
+    public async Task<string> GetActualNews([Description("Az ország pontos neve, például Magyarország.")]string country, CancellationToken cancellationToken = default)
     {
-        return await _newsService.GetActualNewsAsync(country);
+        return await _newsService.GetActualNewsAsync(country, cancellationToken);
     }
 
 }

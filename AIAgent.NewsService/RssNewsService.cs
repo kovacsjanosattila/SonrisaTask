@@ -29,13 +29,12 @@ public class RssNewsService : INewsService
 
     }
 
-    public async Task<string> GetActualNewsAsync(string country)
+    public async Task<string> GetActualNewsAsync(string country, CancellationToken cancellationToken = default)
     {
         try
         {
             // 1. Download an RSS XML into one stream
-            // TODO: CancellationToken !!
-            using var responseStream = await _httpClient.GetStreamAsync(_rssFeedUrl);
+            using var responseStream = await _httpClient.GetStreamAsync(_rssFeedUrl, cancellationToken);
             
             // 2. Create a safe XmlReadert 
             using var xmlReader = XmlReader.Create(responseStream, new XmlReaderSettings 

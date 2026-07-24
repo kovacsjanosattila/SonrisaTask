@@ -14,11 +14,11 @@ public class OpenWeatherService : IWeatherService
         _apiKey = configuration["OpenWeather:ApiKey"];
     }
 
-    public async Task<string> GetCurrentWeatherAsync(string city)
+    public async Task<string> GetCurrentWeatherAsync(string city,CancellationToken cancellationToken = default)
     {
         var url = $"https://api.openweathermap.org/data/2.5/weather?q={city}&appid={_apiKey}";
         
-        var response = await _httpClient.GetStringAsync(url);
+        var response = await _httpClient.GetStringAsync(url,cancellationToken);
         
         var json = JsonDocument.Parse(response);
 
